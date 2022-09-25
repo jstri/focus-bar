@@ -1,11 +1,8 @@
-# import pyautogui
 import sys
 import pynput
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-#pyqt6
-#pywin32
 
 # create app
 app = QApplication(sys.argv)
@@ -15,24 +12,16 @@ res = {
     "height": screen.height()
 }
 
-# overlay_base = QWidget()
-# overlay_base.move(0, 0)
-# overlay_base.resize(res["width"], res["height"])
-# overlay_base.setWindowFlag(Qt.FramelessWindowHint)
-# overlay_base.setAttribute(Qt.WA_TranslucentBackground)
-# overlay_top = QWidget(overlay_base)
-# overlay_bot = QWidget(overlay_base)
+# initialise overlays
 overlay_top = QWidget()
 overlay_bot = QWidget()
 
 def create_overlays(x, y):
-    print("created overlays")
-    print("x: " + str(x))
-    print("y: " + str(y))
-
-
-    # overlay_base.show()
+    """create overlays
     
+    x : width of screen
+    y : height of screen
+    """
     # create top and bottom overlay
     # into variables defined above
     overlay_top.setGeometry(0, 0, x, y)
@@ -47,15 +36,6 @@ def create_overlays(x, y):
     overlay_bot.setWindowOpacity(0.8)
     overlay_bot.show()
 
-    # start mouse movement listener
-
-# def # on press esc:
-    # close overlays
-
-
-
-
-
 # create base window
 window = QWidget()
 window.resize(400, 250)
@@ -66,13 +46,7 @@ button.move(50, 50)
 button.clicked.connect(lambda: create_overlays(res["width"], res["height"]))
 window.show()
 
-# get monitor size
-# set variables (tuple ?) for top and bottom overlays
-
 def on_move(x, y):
-    print(f"mouse moved to: {x}, {y}")
-
-    # move overlays
     overlay_top.move(0, y-res["height"]-(100/2))
     overlay_bot.move(0, y+(100/2))
 
@@ -80,14 +54,11 @@ def on_press(key):
     if key == pynput.keyboard.Key.esc:
         overlay_top.hide()
         overlay_bot.hide()
-        # mouse_listener.stop()
-        # keyboard_listener.stop()
 
-
+# mouse pos and esc button listeners
 mouse_listener = pynput.mouse.Listener(on_move=on_move)
-keyboard_listener = pynput.keyboard.Listener(on_press=on_press)
-
 mouse_listener.start()
+keyboard_listener = pynput.keyboard.Listener(on_press=on_press)
 keyboard_listener.start()
 
 app.exec()
